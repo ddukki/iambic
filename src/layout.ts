@@ -46,6 +46,8 @@ export function computeLayout(poem: Poem): ComputedLayout {
           size: ws,
           weight: w.weight ?? 400,
           style: w.style ?? 'normal',
+          color: w.color ?? '#000000',
+          gradient: w.gradient,
           x: xOffset + offsetX,
           y: currentY + offsetY,
           width: ww,
