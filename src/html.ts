@@ -10,9 +10,9 @@ function escapeHtml(text: string): string {
     .replace(/"/g, '&quot;')
 }
 
-export function renderPoemHTML(poem: Poem): string {
+export function renderPoemHTML(poem: Poem, padding = 40): string {
   const layout = computeLayout(poem)
-  const poemStyles = generatePoemStyles({ width: layout.width, height: layout.height, background: layout.canvas?.background ?? '#ffffff' })
+  const poemStyles = generatePoemStyles({ width: layout.width, height: layout.height + padding * 2, background: layout.canvas?.background ?? '#ffffff' })
 
   let backgroundsHTML = ''
   if (poem.backgrounds && poem.backgrounds.length > 0) {
@@ -35,7 +35,7 @@ export function renderPoemHTML(poem: Poem): string {
 
   return `<div class="iambic-poem" style="${poemStyles}">
 ${backgroundsHTML}
-      <div class="iambic-content" style="position: relative; z-index: 1;">
+      <div class="iambic-content" style="position: absolute; top: ${padding}px; left: ${padding}px; right: ${padding}px; bottom: ${padding}px; z-index: 1;">
 ${stanzasHTML}
       </div>
     </div>`
