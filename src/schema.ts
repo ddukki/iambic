@@ -1,30 +1,45 @@
 import type { Poem, Canvas, Stanza, Line, Word } from './types'
 
-const DEFAULT_CANVAS = { width: 800, height: 'auto' as const, background: '#ffffff' }
-const DEFAULT_WORD = { size: 16, weight: 400, style: 'normal' as const, color: '#000000', offsetX: 0, offsetY: 0 }
-const DEFAULT_LINE: Omit<Line, 'words'> = { indent: 0, alignment: 'left' as const, spacing: 1.5 }
-const DEFAULT_STANZA: Omit<Stanza, 'lines'> = { spacingAfter: 24 }
+const DEFAULTS = {
+  canvas: { width: 800, height: 'auto' as const, background: '#ffffff' },
+  word: { size: 16, weight: 400, style: 'normal' as const, color: '#000000', offsetX: 0, offsetY: 0 },
+  line: { indent: 0, alignment: 'left' as const, spacing: 1.5 },
+  stanza: { spacingAfter: 24 },
+}
 
 export function normalizeCanvas(canvas?: Canvas) {
-  return { ...DEFAULT_CANVAS, ...canvas }
+  return {
+    width: canvas?.width ?? DEFAULTS.canvas.width,
+    height: canvas?.height ?? DEFAULTS.canvas.height,
+    background: canvas?.background ?? DEFAULTS.canvas.background,
+  }
 }
 
 export function normalizeWord(word: Word) {
-  return { ...DEFAULT_WORD, ...word }
+  return {
+    text: word.text,
+    size: word.size ?? DEFAULTS.word.size,
+    weight: word.weight ?? DEFAULTS.word.weight,
+    style: word.style ?? DEFAULTS.word.style,
+    color: word.color ?? DEFAULTS.word.color,
+    offsetX: word.offsetX ?? DEFAULTS.word.offsetX,
+    offsetY: word.offsetY ?? DEFAULTS.word.offsetY,
+    gradient: word.gradient,
+  }
 }
 
 export function normalizeLine(line: Line) {
   return {
-    ...DEFAULT_LINE,
-    ...line,
+    indent: line.indent ?? DEFAULTS.line.indent,
+    alignment: line.alignment ?? DEFAULTS.line.alignment,
+    spacing: line.spacing ?? DEFAULTS.line.spacing,
     words: line.words.map(normalizeWord),
   }
 }
 
 export function normalizeStanza(stanza: Stanza) {
   return {
-    ...DEFAULT_STANZA,
-    ...stanza,
+    spacingAfter: stanza.spacingAfter ?? DEFAULTS.stanza.spacingAfter,
     lines: stanza.lines.map(normalizeLine),
   }
 }
