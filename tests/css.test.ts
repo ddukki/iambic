@@ -42,6 +42,7 @@ describe('generatePoemStyles', () => {
     expect(styles).toContain('width: 800px')
     expect(styles).toContain('height: 200px')
     expect(styles).toContain('background: #f0f0f0')
+    expect(styles).toContain('border-radius: 12px')
   })
 })
 

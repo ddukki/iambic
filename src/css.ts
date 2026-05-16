@@ -31,6 +31,7 @@ export function generatePoemStyles(poemCanvas: { width: number; height: number; 
     `overflow: hidden`,
     `background: ${poemCanvas.background}`,
     `font-family: Georgia, 'Times New Roman', serif`,
+    `border-radius: 12px`,
   ]
   return parts.join('; ')
 }
