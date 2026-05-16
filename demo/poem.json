@@ -1,0 +1,49 @@
+{
+  "meta": { "title": "The Road Not Taken", "author": "Robert Frost" },
+  "canvas": { "width": 600, "background": "#faf6f0" },
+  "backgrounds": [
+    { "type": "gradient", "colors": ["#faf6f0", "#e8ddd0"], "angle": 180 }
+  ],
+  "stanzas": [
+    {
+      "spacingAfter": 32,
+      "lines": [
+        { "indent": 0, "alignment": "left", "words": [{ "text": "Two roads", "size": 18 }, { "text": "diverged", "size": 24, "weight": 700, "color": "#8B4513" }, { "text": "in a yellow wood,", "size": 18 }] },
+        { "indent": 2, "alignment": "left", "words": [{ "text": "And sorry I could not travel both", "size": 16, "style": "italic" }] },
+        { "indent": 0, "alignment": "left", "words": [{ "text": "And be one traveler, long I stood", "size": 16 }] },
+        { "indent": 2, "alignment": "left", "words": [{ "text": "And looked down one as far as I could", "size": 16 }] },
+        { "indent": 0, "alignment": "left", "words": [{ "text": "To where it bent in the undergrowth;", "size": 16, "gradient": { "colors": ["#2d5016", "#4a8c2a"], "angle": 90 } }] }
+      ]
+    },
+    {
+      "spacingAfter": 0,
+      "lines": [
+        { "indent": 0, "alignment": "left", "words": [{ "text": "Then took the other, as just as fair,", "size": 16 }] },
+        { "indent": 2, "alignment": "left", "words": [{ "text": "And having perhaps the better claim,", "size": 16, "style": "italic" }] },
+        { "indent": 0, "alignment": "left", "words": [{ "text": "Because it was grassy and wanted wear;", "size": 16 }] },
+        { "indent": 2, "alignment": "left", "words": [{ "text": "Though as for that the passing there", "size": 16 }] },
+        { "indent": 0, "alignment": "left", "words": [{ "text": "Had worn them really about the same,", "size": 16 }] }
+      ]
+    },
+    {
+      "spacingAfter": 32,
+      "lines": [
+        { "indent": 0, "alignment": "left", "words": [{ "text": "And both that morning equally lay", "size": 16 }] },
+        { "indent": 2, "alignment": "left", "words": [{ "text": "In leaves no step had trodden black.", "size": 16 }] },
+        { "indent": 0, "alignment": "left", "words": [{ "text": "Oh, I kept the first for another day!", "size": 16 }] },
+        { "indent": 2, "alignment": "left", "words": [{ "text": "Yet knowing how way leads on to way,", "size": 16 }] },
+        { "indent": 0, "alignment": "left", "words": [{ "text": "I doubted if I should ever come back.", "size": 16 }] }
+      ]
+    },
+    {
+      "spacingAfter": 0,
+      "lines": [
+        { "indent": 0, "alignment": "left", "words": [{ "text": "I shall be telling this with a sigh", "size": 16 }] },
+        { "indent": 2, "alignment": "left", "words": [{ "text": "Somewhere ages and ages hence:", "size": 16 }] },
+        { "indent": 0, "alignment": "left", "words": [{ "text": "Two roads diverged in a wood, and I\u2014", "size": 16 }] },
+        { "indent": 2, "alignment": "left", "words": [{ "text": "I took the one less traveled by,", "size": 16 }] },
+        { "indent": 0, "alignment": "left", "words": [{ "text": "And that has made all the difference.", "size": 16, "weight": 700 }] }
+      ]
+    }
+  ]
+}
