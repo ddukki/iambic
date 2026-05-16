@@ -1,8 +1,25 @@
 import type { Poem, ComputedLayout, ComputedStanza, ComputedLine, ComputedWord } from './types'
 
-function measureText(text: string, size: number): number {
+const FONT_FAMILY = 'Georgia, "Times New Roman", serif'
+
+let _ctx: CanvasRenderingContext2D | null = null
+function measureText(text: string, size: number, weight?: number, style?: string): number {
+  if (typeof document !== 'undefined') {
+    if (!_ctx) {
+      const c = document.createElement('canvas')
+      _ctx = c.getContext('2d')
+    }
+    if (_ctx) {
+      const w = weight ?? 400
+      const s = style ?? 'normal'
+      _ctx.font = `${s} ${w} ${size}px ${FONT_FAMILY}`
+      return _ctx.measureText(text).width
+    }
+  }
   return text.length * size * 0.6
 }
+
+export { measureText }
 
 export function computeLayout(poem: Poem): ComputedLayout {
   const width = poem.canvas?.width ?? 800
@@ -21,7 +38,7 @@ export function computeLayout(poem: Poem): ComputedLayout {
 
       let totalWordWidth = 0
       for (const w of line.words) {
-        totalWordWidth += measureText(w.text, w.size ?? 16)
+        totalWordWidth += measureText(w.text, w.size ?? 16, w.weight, w.style)
       }
 
       let xOffset: number
@@ -36,7 +53,7 @@ export function computeLayout(poem: Poem): ComputedLayout {
       for (let wi = 0; wi < line.words.length; wi++) {
         const w = line.words[wi]
         const ws = w.size ?? 16
-        const ww = measureText(w.text, ws)
+        const ww = measureText(w.text, ws, w.weight, w.style)
         const wh = ws * 1.4
         const offsetX = w.offsetX ?? 0
         const offsetY = w.offsetY ?? 0
@@ -52,6 +69,8 @@ export function computeLayout(poem: Poem): ComputedLayout {
           y: currentY + offsetY,
           width: ww,
           height: wh,
+          offsetX: w.offsetX,
+          offsetY: w.offsetY,
         })
 
         xOffset += ww + ws * 0.3

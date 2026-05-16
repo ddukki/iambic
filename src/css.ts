@@ -7,6 +7,14 @@ export function generateWordStyles(word: ComputedWord): string {
   parts.push(`font-weight: ${word.weight ?? 400}`)
   parts.push(`font-style: ${word.style ?? 'normal'}`)
   parts.push(`position: absolute`)
+  parts.push(`white-space: nowrap`)
+  parts.push(`overflow: hidden`)
+
+  if (word.text) {
+    parts.push(`width: ${word.width}px`)
+  } else {
+    parts.push(`min-width: ${(word.size ?? 16) * 2}px`)
+  }
 
   if (word.gradient) {
     parts.push(`background: linear-gradient(${word.gradient.angle}deg, ${word.gradient.colors.join(', ')})`)
