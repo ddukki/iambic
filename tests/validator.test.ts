@@ -9,7 +9,7 @@ describe('validatePoem', () => {
   })
 
   it('should reject missing stanzas', () => {
-    const result = validatePoem({} as any)
+    const result = validatePoem({})
     expect(result.valid).toBe(false)
     expect(result.errors.length).toBeGreaterThan(0)
   })
@@ -34,8 +34,23 @@ describe('validatePoem', () => {
     expect(result.valid).toBe(false)
   })
 
+  it('should reject whitespace-only text', () => {
+    const result = validatePoem({ stanzas: [{ lines: [{ words: [{ text: '   ' }] }] }] })
+    expect(result.valid).toBe(false)
+  })
+
   it('should reject negative indent', () => {
     const result = validatePoem({ stanzas: [{ lines: [{ indent: -1, words: [{ text: 'a' }] }] }] })
+    expect(result.valid).toBe(false)
+  })
+
+  it('should reject null input', () => {
+    const result = validatePoem(null)
+    expect(result.valid).toBe(false)
+  })
+
+  it('should reject non-object input', () => {
+    const result = validatePoem('not a poem')
     expect(result.valid).toBe(false)
   })
 })

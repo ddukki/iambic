@@ -75,8 +75,8 @@ export function validatePoem(poem: unknown): ValidationResult {
           continue
         }
 
-        if (!word.text || typeof word.text !== 'string' || (word.text as string).trim() === '') {
-          errors.push({ path: `${wp}.text`, message: 'word text must be a non-empty string' })
+        if (typeof word.text !== 'string' || word.text.trim() === '') {
+          errors.push({ path: `${wp}.text`, message: 'word text must be a non-blank string' })
         }
       }
     }
