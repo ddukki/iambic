@@ -52,7 +52,7 @@ export function computeLayout(poem: Poem): ComputedLayout {
           height: wh,
         })
 
-        xOffset += ww
+        xOffset += ww + ws * 0.3
       }
 
       lines.push({ words, y: currentY, height: lineHeight, alignment })
@@ -64,11 +64,17 @@ export function computeLayout(poem: Poem): ComputedLayout {
     currentY += stanza.spacingAfter ?? 24
   }
 
+  const canvas = {
+    width: poem.canvas?.width ?? 800,
+    height: poem.canvas?.height ?? 'auto' as const,
+    background: poem.canvas?.background ?? '#ffffff',
+  }
+
   return {
     width,
     height: currentY,
     stanzas,
     backgrounds: poem.backgrounds ?? [],
-    canvas: poem.canvas as Required<Poem['canvas']>,
+    canvas,
   }
 }

@@ -46,7 +46,8 @@ describe('computeLayout', () => {
     })
     const layout = computeLayout(poem)
     const word = layout.stanzas[0].lines[0].words[0]
-    expect(word.x).toBeGreaterThan(0)
+    const expectedCenter = (800 - word.width) / 2
+    expect(word.x).toBeCloseTo(expectedCenter)
   })
 
   it('should layout multiple stanzas with spacing', () => {
@@ -75,7 +76,8 @@ describe('computeLayout', () => {
     })
     const layout = computeLayout(poem)
     const words = layout.stanzas[0].lines[0].words
-    expect(words[1].x).toBe(words[0].x + words[0].width + 50)
+    const gap = 16 * 0.3
+    expect(words[1].x).toBeCloseTo(words[0].x + words[0].width + gap + 50)
     expect(words[1].y).toBe(words[0].y - 10)
   })
 
@@ -108,6 +110,16 @@ describe('computeLayout', () => {
     const words = layout.stanzas[0].lines[0].words
     expect(words[0].x).toBeLessThan(words[1].x)
     expect(words[1].x).toBeLessThan(words[2].x)
+  })
+
+  it('should handle missing canvas gracefully', () => {
+    const poem = normalizePoem({
+      stanzas: [{ lines: [{ words: [{ text: 'No canvas' }] }] }],
+    })
+    const layout = computeLayout(poem)
+    expect(layout.width).toBe(800)
+    expect(layout.canvas.width).toBe(800)
+    expect(layout.canvas.background).toBe('#ffffff')
   })
 
   it('should respect right alignment', () => {
