@@ -17,17 +17,16 @@ export function generateWordStyles(word: ComputedWord): string {
     parts.push(`color: ${word.color ?? '#000000'}`)
   }
 
-  if (word.x !== 0 || word.y !== 0) {
-    parts.push(`left: ${word.x}px`)
-    parts.push(`top: ${word.y}px`)
-  }
+  parts.push(`left: ${word.x}px`)
+  parts.push(`top: ${word.y}px`)
 
   return parts.join('; ')
 }
 
-export function generatePoemStyles(poemCanvas: { width: number; background: string }): string {
+export function generatePoemStyles(poemCanvas: { width: number; height: number; background: string }): string {
   const parts: string[] = [
     `width: ${poemCanvas.width}px`,
+    `height: ${poemCanvas.height}px`,
     `position: relative`,
     `overflow: hidden`,
     `background: ${poemCanvas.background}`,

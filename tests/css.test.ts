@@ -38,8 +38,9 @@ describe('generateWordStyles', () => {
 
 describe('generatePoemStyles', () => {
   it('should generate container styles', () => {
-    const styles = generatePoemStyles({ width: 800, background: '#f0f0f0' })
+    const styles = generatePoemStyles({ width: 800, height: 200, background: '#f0f0f0' })
     expect(styles).toContain('width: 800px')
+    expect(styles).toContain('height: 200px')
     expect(styles).toContain('background: #f0f0f0')
   })
 })

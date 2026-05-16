@@ -12,7 +12,7 @@ function escapeHtml(text: string): string {
 
 export function renderPoemHTML(poem: Poem): string {
   const layout = computeLayout(poem)
-  const poemStyles = generatePoemStyles({ width: layout.width, background: layout.canvas?.background ?? '#ffffff' })
+  const poemStyles = generatePoemStyles({ width: layout.width, height: layout.height, background: layout.canvas?.background ?? '#ffffff' })
 
   let backgroundsHTML = ''
   if (poem.backgrounds && poem.backgrounds.length > 0) {
