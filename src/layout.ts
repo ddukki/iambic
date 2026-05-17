@@ -21,6 +21,21 @@ function measureText(text: string, size: number, weight?: number, style?: string
 
 export { measureText }
 
+export function findSplitIndex(text: string, size: number, weight: number, style: string, x: number): number {
+  if (!text || text.length <= 1) return 1
+  let best = 1
+  let bestDist = Math.abs(x - measureText(text[0], size, weight, style))
+  for (let i = 2; i < text.length; i++) {
+    const w = measureText(text.slice(0, i), size, weight, style)
+    const dist = Math.abs(x - w)
+    if (dist < bestDist) {
+      bestDist = dist
+      best = i
+    }
+  }
+  return Math.max(1, Math.min(text.length - 1, best))
+}
+
 export function computeLayout(poem: Poem): ComputedLayout {
   const width = poem.canvas?.width ?? 800
   let currentY = 0
