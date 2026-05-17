@@ -18,6 +18,30 @@
     "./react": {
       "import": "./dist/react.js",
       "types": "./dist/react.d.ts"
+    },
+    "./dom": {
+      "import": "./dist/dom.js",
+      "types": "./dist/dom.d.ts"
+    },
+    "./css": {
+      "import": "./dist/css.js",
+      "types": "./dist/css.d.ts"
+    },
+    "./layout": {
+      "import": "./dist/layout.js",
+      "types": "./dist/layout.d.ts"
+    },
+    "./html": {
+      "import": "./dist/html.js",
+      "types": "./dist/html.d.ts"
+    },
+    "./schema": {
+      "import": "./dist/schema.js",
+      "types": "./dist/schema.d.ts"
+    },
+    "./validator": {
+      "import": "./dist/validator.js",
+      "types": "./dist/validator.d.ts"
     }
   },
   "main": "./dist/index.js",
