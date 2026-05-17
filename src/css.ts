@@ -1,32 +1,32 @@
-import type { ComputedWord, BackgroundLayer } from './types'
+import type { ComputedFragment, BackgroundLayer } from './types'
 
-export function generateWordStyles(word: ComputedWord): string {
+export function generateFragmentStyles(fragment: ComputedFragment): string {
   const parts: string[] = []
 
-  parts.push(`font-size: ${word.size ?? 16}px`)
-  parts.push(`font-weight: ${word.weight ?? 400}`)
-  parts.push(`font-style: ${word.style ?? 'normal'}`)
+  parts.push(`font-size: ${fragment.size ?? 16}px`)
+  parts.push(`font-weight: ${fragment.weight ?? 400}`)
+  parts.push(`font-style: ${fragment.style ?? 'normal'}`)
   parts.push(`position: absolute`)
   parts.push(`white-space: nowrap`)
   parts.push(`overflow: hidden`)
 
-  if (word.text) {
-    parts.push(`width: ${word.width}px`)
+  if (fragment.text) {
+    parts.push(`width: ${fragment.width}px`)
   } else {
-    parts.push(`min-width: ${(word.size ?? 16) * 2}px`)
+    parts.push(`min-width: ${(fragment.size ?? 16) * 2}px`)
   }
 
-  if (word.gradient) {
-    parts.push(`background: linear-gradient(${word.gradient.angle}deg, ${word.gradient.colors.join(', ')})`)
+  if (fragment.gradient) {
+    parts.push(`background: linear-gradient(${fragment.gradient.angle}deg, ${fragment.gradient.colors.join(', ')})`)
     parts.push(`-webkit-background-clip: text`)
     parts.push(`-webkit-text-fill-color: transparent`)
     parts.push(`background-clip: text`)
   } else {
-    parts.push(`color: ${word.color ?? '#000000'}`)
+    parts.push(`color: ${fragment.color ?? '#000000'}`)
   }
 
-  parts.push(`left: ${word.x}px`)
-  parts.push(`top: ${word.y}px`)
+  parts.push(`left: ${fragment.x}px`)
+  parts.push(`top: ${fragment.y}px`)
 
   return parts.join('; ')
 }

@@ -1,4 +1,4 @@
-import type { Poem, ComputedLayout, ComputedStanza, ComputedLine, ComputedWord } from './types'
+import type { Poem, ComputedLayout, ComputedStanza, ComputedLine, ComputedFragment } from './types'
 
 const FONT_FAMILY = 'Georgia, "Times New Roman", serif'
 
@@ -46,52 +46,52 @@ export function computeLayout(poem: Poem): ComputedLayout {
     const stanzaStartY = currentY
 
     for (const line of stanza.lines) {
-      const lineHeight = (line.spacing ?? 1.5) * (line.words[0]?.size ?? 16)
-      const lineIndent = (line.indent ?? 0) * (line.words[0]?.size ?? 16) * 0.6
+      const lineHeight = (line.spacing ?? 1.5) * (line.fragments[0]?.size ?? 16)
+      const lineIndent = (line.indent ?? 0) * (line.fragments[0]?.size ?? 16) * 0.6
       const alignment = line.alignment ?? 'left'
-      const words: ComputedWord[] = []
+      const fragments: ComputedFragment[] = []
 
-      let totalWordWidth = 0
-      for (const w of line.words) {
-        totalWordWidth += measureText(w.text, w.size ?? 16, w.weight, w.style)
+      let totalFragmentWidth = 0
+      for (const f of line.fragments) {
+        totalFragmentWidth += measureText(f.text, f.size ?? 16, f.weight, f.style)
       }
 
       let xOffset: number
       if (alignment === 'center') {
-        xOffset = (width - totalWordWidth) / 2
+        xOffset = (width - totalFragmentWidth) / 2
       } else if (alignment === 'right') {
-        xOffset = width - totalWordWidth
+        xOffset = width - totalFragmentWidth
       } else {
         xOffset = lineIndent
       }
 
-      for (let wi = 0; wi < line.words.length; wi++) {
-        const w = line.words[wi]
-        const ws = w.size ?? 16
-        const ww = measureText(w.text, ws, w.weight, w.style)
-        const wh = ws * 1.4
-        const offsetX = w.offsetX ?? 0
-        const offsetY = w.offsetY ?? 0
+      for (let fi = 0; fi < line.fragments.length; fi++) {
+        const f = line.fragments[fi]
+        const fs = f.size ?? 16
+        const fw = measureText(f.text, fs, f.weight, f.style)
+        const fh = fs * 1.4
+        const offsetX = f.offsetX ?? 0
+        const offsetY = f.offsetY ?? 0
 
-        words.push({
-          text: w.text,
-          size: ws,
-          weight: w.weight ?? 400,
-          style: w.style ?? 'normal',
-          color: w.color ?? '#000000',
-          gradient: w.gradient,
+        fragments.push({
+          text: f.text,
+          size: fs,
+          weight: f.weight ?? 400,
+          style: f.style ?? 'normal',
+          color: f.color ?? '#000000',
+          gradient: f.gradient,
           x: xOffset + offsetX,
           y: currentY + offsetY,
-          width: ww,
-          height: wh,
-          offsetX: w.offsetX,
-          offsetY: w.offsetY,
+          width: fw,
+          height: fh,
+          offsetX: f.offsetX,
+          offsetY: f.offsetY,
         })
 
-        xOffset += ww + ws * 0.3
+        xOffset += fw + fs * 0.3
       }
 
-      lines.push({ words, y: currentY, height: lineHeight, alignment })
+      lines.push({ fragments, y: currentY, height: lineHeight, alignment })
       currentY += lineHeight
     }
 

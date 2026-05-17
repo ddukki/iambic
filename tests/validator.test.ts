@@ -3,7 +3,7 @@ import { validatePoem } from '../src/validator'
 
 describe('validatePoem', () => {
   it('should return valid for a correct minimal poem', () => {
-    const result = validatePoem({ stanzas: [{ lines: [{ words: [{ text: 'Hi' }] }] }] })
+    const result = validatePoem({ stanzas: [{ lines: [{ fragments: [{ text: 'Hi' }] }] }] })
     expect(result.valid).toBe(true)
     expect(result.errors).toHaveLength(0)
   })
@@ -24,23 +24,23 @@ describe('validatePoem', () => {
     expect(result.valid).toBe(false)
   })
 
-  it('should reject line with empty words', () => {
-    const result = validatePoem({ stanzas: [{ lines: [{ words: [] }] }] })
+  it('should reject line with empty fragments', () => {
+    const result = validatePoem({ stanzas: [{ lines: [{ fragments: [] }] }] })
     expect(result.valid).toBe(false)
   })
 
-  it('should reject word with empty text', () => {
-    const result = validatePoem({ stanzas: [{ lines: [{ words: [{ text: '' }] }] }] })
+  it('should reject fragment with empty text', () => {
+    const result = validatePoem({ stanzas: [{ lines: [{ fragments: [{ text: '' }] }] }] })
     expect(result.valid).toBe(false)
   })
 
   it('should reject whitespace-only text', () => {
-    const result = validatePoem({ stanzas: [{ lines: [{ words: [{ text: '   ' }] }] }] })
+    const result = validatePoem({ stanzas: [{ lines: [{ fragments: [{ text: '   ' }] }] }] })
     expect(result.valid).toBe(false)
   })
 
   it('should reject negative indent', () => {
-    const result = validatePoem({ stanzas: [{ lines: [{ indent: -1, words: [{ text: 'a' }] }] }] })
+    const result = validatePoem({ stanzas: [{ lines: [{ indent: -1, fragments: [{ text: 'a' }] }] }] })
     expect(result.valid).toBe(false)
   })
 

@@ -15,7 +15,7 @@ import { render } from 'iambic'
 
 const html = render({
   stanzas: [{
-    lines: [{ words: [{ text: 'Hello', size: 16 }] }]
+    lines: [{ fragments: [{ text: 'Hello', size: 16 }] }]
   }]
 })
 // → '<div class="iambic-poem" style="...">...</div>'
@@ -24,13 +24,12 @@ const html = render({
 ## Rendering Pipeline
 
 ```
-JSON poem → normalizePoem (fill defaults) → computeLayout (positions) → renderPoemHTML (HTML string)
+JSON poem → normalizePoem (fill defaults) → renderPoemHTML (HTML string)
 ```
 
-Three stages:
+Two stages:
 1. **Normalize** — fills all optional fields with defaults
-2. **Layout** — computes pixel positions for every word, line, stanza
-3. **Render** — produces HTML/CSS string with inline styles
+2. **Render** — produces HTML/CSS string with inline styles
 
 ## Poem Format
 
@@ -85,18 +84,18 @@ Three stages:
   "indent": 2,
   "alignment": "left",
   "spacing": 1.5,
-  "words": [...]
-}
-```
+  "fragments": [...]
+  }
+  ```
 
-| Field | Type | Default | Description |
-|-------|------|---------|-------------|
-| `indent` | `number` | `0` | Left indent in em-widths |
-| `alignment` | `'left' \| 'center' \| 'right'` | `'left'` | Line alignment |
-| `spacing` | `number` | `1.5` | Line height multiplier |
-| `words` | `Word[]` | required | Words on the line |
+  | Field | Type | Default | Description |
+  |-------|------|---------|-------------|
+  | `indent` | `number` | `0` | Left indent in em-widths |
+  | `alignment` | `'left' \| 'center' \| 'right'` | `'left'` | Line alignment |
+  | `spacing` | `number` | `1.5` | Line height multiplier |
+  | `fragments` | `Fragment[]` | required | Fragments on the line |
 
-### Word
+### Fragment
 
 ```json
 {
@@ -113,16 +112,16 @@ Three stages:
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `text` | `string` | required | Word text |
+| `text` | `string` | required | Fragment text |
 | `size` | `number` | `16` | Font size in px |
 | `weight` | `number` | `400` | Font weight |
 | `color` | `string` | `#000000` | Text color |
 | `style` | `'normal' \| 'italic'` | `'normal'` | Font style |
 | `offsetX` | `number` | `0` | Free-position X offset |
 | `offsetY` | `number` | `0` | Free-position Y offset |
-| `gradient` | `WordGradient` | — | Text gradient |
+| `gradient` | `FragmentGradient` | — | Text gradient |
 
-### WordGradient
+### FragmentGradient
 
 ```json
 { "colors": ["#ff6b6b", "#4ecdc4"], "angle": 90 }
@@ -187,7 +186,7 @@ import { render } from 'iambic'
 const html = render({
   meta: { title: 'My Poem', author: 'Me' },
   canvas: { width: 600, background: '#faf6f0' },
-  stanzas: [{ lines: [{ words: [{ text: 'Hello', size: 18 }] }] }],
+  stanzas: [{ lines: [{ fragments: [{ text: 'Hello', size: 18 }] }] }],
 })
 ```
 
@@ -236,10 +235,6 @@ const result = validatePoem({ stanzas: [] })
 
 Fills all optional fields with defaults. Returns a fully-populated poem object.
 
-### `computeLayout(poem)`
-
-Computes pixel positions for every word, line, and stanza. Returns `ComputedLayout`.
-
 ### React Component
 
 ```tsx
@@ -259,12 +254,12 @@ Props: `{ poem: Poem, className?: string }`
 | `canvas.width` | `800` |
 | `canvas.height` | `'auto'` |
 | `canvas.background` | `'#ffffff'` |
-| `word.size` | `16` |
-| `word.weight` | `400` |
-| `word.style` | `'normal'` |
-| `word.color` | `'#000000'` |
-| `word.offsetX` | `0` |
-| `word.offsetY` | `0` |
+| `fragment.size` | `16` |
+| `fragment.weight` | `400` |
+| `fragment.style` | `'normal'` |
+| `fragment.color` | `'#000000'` |
+| `fragment.offsetX` | `0` |
+| `fragment.offsetY` | `0` |
 | `line.indent` | `0` |
 | `line.alignment` | `'left'` |
 | `line.spacing` | `1.5` |
@@ -280,12 +275,12 @@ Props: `{ poem: Poem, className?: string }`
   <div class="iambic-content" style="position: absolute; top: 40px; left: 40px; right: 40px; bottom: 40px; z-index: 1;">
     <div class="iambic-stanza">
       <div class="iambic-line">
-        <span class="iambic-word" style="font-size: 18px; font-weight: 400; position: absolute; left: 0px; top: 0px; color: #000000;">Two roads</span>
-        <span class="iambic-word" style="font-size: 24px; font-weight: 700; position: absolute; left: 82px; top: 0px; color: #8B4513;">diverged</span>
+        <span class="iambic-fragment" style="font-size: 18px; font-weight: 400; position: absolute; left: 0px; top: 0px; color: #000000;">Two roads</span>
+        <span class="iambic-fragment" style="font-size: 24px; font-weight: 700; position: absolute; left: 82px; top: 0px; color: #8B4513;">diverged</span>
       </div>
     </div>
   </div>
 </div>
 ```
 
-Words use `position: absolute` within `.iambic-content`. Backgrounds use `position: absolute; inset: 0` to fill the container.
+Fragments use `position: absolute` within `.iambic-content`. Backgrounds use `position: absolute; inset: 0` to fill the container.

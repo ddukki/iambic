@@ -1,8 +1,8 @@
-import type { Poem, Canvas, Stanza, Line, Word } from './types'
+import type { Poem, Canvas, Stanza, Line, Fragment } from './types'
 
 const DEFAULTS = {
   canvas: { width: 800, height: 'auto' as const, background: '#ffffff' },
-  word: { size: 16, weight: 400, style: 'normal' as const, color: '#000000', offsetX: 0, offsetY: 0 },
+  fragment: { size: 16, weight: 400, style: 'normal' as const, color: '#000000', offsetX: 0, offsetY: 0 },
   line: { indent: 0, alignment: 'left' as const, spacing: 1.5 },
   stanza: { spacingAfter: 24 },
 }
@@ -15,16 +15,16 @@ export function normalizeCanvas(canvas?: Canvas) {
   }
 }
 
-export function normalizeWord(word: Word) {
+export function normalizeFragment(fragment: Fragment) {
   return {
-    text: word.text,
-    size: word.size ?? DEFAULTS.word.size,
-    weight: word.weight ?? DEFAULTS.word.weight,
-    style: word.style ?? DEFAULTS.word.style,
-    color: word.color ?? DEFAULTS.word.color,
-    offsetX: word.offsetX ?? DEFAULTS.word.offsetX,
-    offsetY: word.offsetY ?? DEFAULTS.word.offsetY,
-    gradient: word.gradient,
+    text: fragment.text,
+    size: fragment.size ?? DEFAULTS.fragment.size,
+    weight: fragment.weight ?? DEFAULTS.fragment.weight,
+    style: fragment.style ?? DEFAULTS.fragment.style,
+    color: fragment.color ?? DEFAULTS.fragment.color,
+    offsetX: fragment.offsetX ?? DEFAULTS.fragment.offsetX,
+    offsetY: fragment.offsetY ?? DEFAULTS.fragment.offsetY,
+    gradient: fragment.gradient,
   }
 }
 
@@ -33,7 +33,7 @@ export function normalizeLine(line: Line) {
     indent: line.indent ?? DEFAULTS.line.indent,
     alignment: line.alignment ?? DEFAULTS.line.alignment,
     spacing: line.spacing ?? DEFAULTS.line.spacing,
-    words: line.words.map(normalizeWord),
+    fragments: line.fragments.map(normalizeFragment),
   }
 }
 

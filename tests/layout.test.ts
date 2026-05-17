@@ -5,19 +5,19 @@ import { normalizePoem } from '../src/schema'
 describe('computeLayout', () => {
   it('should compute positions for a single word', () => {
     const poem = normalizePoem({
-      stanzas: [{ lines: [{ words: [{ text: 'Hello', size: 16 }] }] }],
+      stanzas: [{ lines: [{ fragments: [{ text: 'Hello', size: 16 }] }] }],
       canvas: { width: 800 },
     })
     const layout = computeLayout(poem)
     expect(layout.stanzas).toHaveLength(1)
     expect(layout.stanzas[0].lines).toHaveLength(1)
-    expect(layout.stanzas[0].lines[0].words).toHaveLength(1)
-    const word = layout.stanzas[0].lines[0].words[0]
-    expect(word.text).toBe('Hello')
-    expect(word.x).toBe(0)
-    expect(word.y).toBe(0)
-    expect(word.width).toBeGreaterThan(0)
-    expect(word.height).toBeGreaterThan(0)
+    expect(layout.stanzas[0].lines[0].fragments).toHaveLength(1)
+    const fragment = layout.stanzas[0].lines[0].fragments[0]
+    expect(fragment.text).toBe('Hello')
+    expect(fragment.x).toBe(0)
+    expect(fragment.y).toBe(0)
+    expect(fragment.width).toBeGreaterThan(0)
+    expect(fragment.height).toBeGreaterThan(0)
   })
 
   it('should indent the second line', () => {
@@ -25,8 +25,8 @@ describe('computeLayout', () => {
       canvas: { width: 800 },
       stanzas: [{
         lines: [
-          { words: [{ text: 'First', size: 16 }] },
-          { indent: 4, words: [{ text: 'Second', size: 16 }] },
+          { fragments: [{ text: 'First', size: 16 }] },
+          { indent: 4, fragments: [{ text: 'Second', size: 16 }] },
         ],
       }],
     })
@@ -40,22 +40,22 @@ describe('computeLayout', () => {
       canvas: { width: 800 },
       stanzas: [{
         lines: [
-          { alignment: 'center', words: [{ text: 'Center', size: 16 }] },
+          { alignment: 'center', fragments: [{ text: 'Center', size: 16 }] },
         ],
       }],
     })
     const layout = computeLayout(poem)
-    const word = layout.stanzas[0].lines[0].words[0]
-    const expectedCenter = (800 - word.width) / 2
-    expect(word.x).toBeCloseTo(expectedCenter)
+    const fragment = layout.stanzas[0].lines[0].fragments[0]
+    const expectedCenter = (800 - fragment.width) / 2
+    expect(fragment.x).toBeCloseTo(expectedCenter)
   })
 
   it('should layout multiple stanzas with spacing', () => {
     const poem = normalizePoem({
       canvas: { width: 800 },
       stanzas: [
-        { lines: [{ words: [{ text: 'Stanza One', size: 16 }] }] },
-        { spacingAfter: 48, lines: [{ words: [{ text: 'Stanza Two', size: 16 }] }] },
+        { lines: [{ fragments: [{ text: 'Stanza One', size: 16 }] }] },
+        { spacingAfter: 48, lines: [{ fragments: [{ text: 'Stanza Two', size: 16 }] }] },
       ],
     })
     const layout = computeLayout(poem)
@@ -67,7 +67,7 @@ describe('computeLayout', () => {
       canvas: { width: 800 },
       stanzas: [{
         lines: [{
-          words: [
+          fragments: [
             { text: 'Normal', size: 16 },
             { text: 'Offset', size: 16, offsetX: 50, offsetY: -10 },
           ],
@@ -75,17 +75,17 @@ describe('computeLayout', () => {
       }],
     })
     const layout = computeLayout(poem)
-    const words = layout.stanzas[0].lines[0].words
+    const fragments = layout.stanzas[0].lines[0].fragments
     const gap = 16 * 0.3
-    expect(words[1].x).toBeCloseTo(words[0].x + words[0].width + gap + 50)
-    expect(words[1].y).toBe(words[0].y - 10)
+    expect(fragments[1].x).toBeCloseTo(fragments[0].x + fragments[0].width + gap + 50)
+    expect(fragments[1].y).toBe(fragments[0].y - 10)
   })
 
   it('should report total layout dimensions', () => {
     const poem = normalizePoem({
       canvas: { width: 400 },
       stanzas: [{
-        lines: [{ words: [{ text: 'Hello world', size: 16 }] }],
+        lines: [{ fragments: [{ text: 'Hello world', size: 16 }] }],
       }],
     })
     const layout = computeLayout(poem)
@@ -98,7 +98,7 @@ describe('computeLayout', () => {
       canvas: { width: 800 },
       stanzas: [{
         lines: [{
-          words: [
+          fragments: [
             { text: 'Word1', size: 16 },
             { text: 'Word2', size: 16 },
             { text: 'Word3', size: 16 },
@@ -107,14 +107,14 @@ describe('computeLayout', () => {
       }],
     })
     const layout = computeLayout(poem)
-    const words = layout.stanzas[0].lines[0].words
-    expect(words[0].x).toBeLessThan(words[1].x)
-    expect(words[1].x).toBeLessThan(words[2].x)
+    const fragments = layout.stanzas[0].lines[0].fragments
+    expect(fragments[0].x).toBeLessThan(fragments[1].x)
+    expect(fragments[1].x).toBeLessThan(fragments[2].x)
   })
 
   it('should handle missing canvas gracefully', () => {
     const poem = normalizePoem({
-      stanzas: [{ lines: [{ words: [{ text: 'No canvas' }] }] }],
+      stanzas: [{ lines: [{ fragments: [{ text: 'No canvas' }] }] }],
     })
     const layout = computeLayout(poem)
     expect(layout.width).toBe(800)
@@ -127,13 +127,13 @@ describe('computeLayout', () => {
       canvas: { width: 800 },
       stanzas: [{
         lines: [
-          { alignment: 'right', words: [{ text: 'Right', size: 16 }] },
+          { alignment: 'right', fragments: [{ text: 'Right', size: 16 }] },
         ],
       }],
     })
     const layout = computeLayout(poem)
-    const word = layout.stanzas[0].lines[0].words[0]
-    expect(word.x).toBeGreaterThan(0)
-    expect(word.x + word.width).toBeLessThanOrEqual(layout.width)
+    const fragment = layout.stanzas[0].lines[0].fragments[0]
+    expect(fragment.x).toBeGreaterThan(0)
+    expect(fragment.x + fragment.width).toBeLessThanOrEqual(layout.width)
   })
 })

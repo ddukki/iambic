@@ -16,7 +16,7 @@ describe('mountPoem', () => {
 
   it('should mount poem HTML into container', () => {
     const poem = normalizePoem({
-      stanzas: [{ lines: [{ words: [{ text: 'Hello', size: 16 }] }] }],
+      stanzas: [{ lines: [{ fragments: [{ text: 'Hello', size: 16 }] }] }],
     })
     mountPoem(poem, container)
     expect(container.querySelector('.iambic-poem')).not.toBeNull()
@@ -25,7 +25,7 @@ describe('mountPoem', () => {
 
   it('should return an unmount function', () => {
     const poem = normalizePoem({
-      stanzas: [{ lines: [{ words: [{ text: 'Test' }] }] }],
+      stanzas: [{ lines: [{ fragments: [{ text: 'Test' }] }] }],
     })
     const unmount = mountPoem(poem, container)
     expect(typeof unmount).toBe('function')

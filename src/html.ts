@@ -1,6 +1,6 @@
 import type { Poem } from './types'
 import { computeLayout } from './layout'
-import { generateWordStyles, generatePoemStyles, generateBackgroundStyles } from './css'
+import { generateFragmentStyles, generatePoemStyles, generateBackgroundStyles } from './css'
 
 function escapeHtml(text: string): string {
   return text
@@ -24,11 +24,11 @@ export function renderPoemHTML(poem: Poem, padding = 40): string {
 
   let stanzasHTML = layout.stanzas.map((stanza) => {
     let linesHTML = stanza.lines.map((line) => {
-      let wordsHTML = line.words.map((word) => {
-        const styles = generateWordStyles(word)
-        return `          <span class="iambic-word" style="${styles}">${escapeHtml(word.text)}</span>`
+      let fragmentsHTML = line.fragments.map((fragment) => {
+        const styles = generateFragmentStyles(fragment)
+        return `          <span class="iambic-fragment" style="${styles}">${escapeHtml(fragment.text)}</span>`
       }).join('\n')
-      return `        <div class="iambic-line">\n${wordsHTML}\n        </div>`
+      return `        <div class="iambic-line">\n${fragmentsHTML}\n        </div>`
     }).join('\n')
     return `      <div class="iambic-stanza">\n${linesHTML}\n      </div>`
   }).join('\n')

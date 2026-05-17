@@ -57,26 +57,26 @@ export function validatePoem(poem: unknown): ValidationResult {
         errors.push({ path: `${lp}.indent`, message: 'indent must be non-negative' })
       }
 
-      if (!Array.isArray(line.words)) {
-        errors.push({ path: `${lp}.words`, message: 'words must be an array' })
+      if (!Array.isArray(line.fragments)) {
+        errors.push({ path: `${lp}.fragments`, message: 'fragments must be an array' })
         continue
       }
 
-      if (line.words.length === 0) {
-        errors.push({ path: `${lp}.words`, message: 'line must have at least one word' })
+      if (line.fragments.length === 0) {
+        errors.push({ path: `${lp}.fragments`, message: 'line must have at least one fragment' })
       }
 
-      for (let wi = 0; wi < line.words.length; wi++) {
-        const word = line.words[wi] as Record<string, unknown>
-        const wp = `${lp}.words[${wi}]`
+      for (let fi = 0; fi < line.fragments.length; fi++) {
+        const fragment = line.fragments[fi] as Record<string, unknown>
+        const wp = `${lp}.fragments[${fi}]`
 
-        if (!word || typeof word !== 'object') {
-          errors.push({ path: wp, message: 'word must be an object' })
+        if (!fragment || typeof fragment !== 'object') {
+          errors.push({ path: wp, message: 'fragment must be an object' })
           continue
         }
 
-        if (typeof word.text !== 'string' || word.text.trim() === '') {
-          errors.push({ path: `${wp}.text`, message: 'word text must be a non-blank string' })
+        if (typeof fragment.text !== 'string' || fragment.text.trim() === '') {
+          errors.push({ path: `${wp}.text`, message: 'fragment text must be a non-blank string' })
         }
       }
     }

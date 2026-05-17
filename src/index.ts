@@ -6,7 +6,6 @@ export type * from './types'
 export { normalizePoem } from './schema'
 export { validatePoem } from './validator'
 export type { ValidationResult, ValidationError } from './validator'
-export { computeLayout } from './layout'
 export { renderPoemHTML, renderFullDocument } from './html'
 export { mountPoem } from './dom'
 

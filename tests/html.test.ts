@@ -5,7 +5,7 @@ import { normalizePoem } from '../src/schema'
 describe('renderPoemHTML', () => {
   it('should render a minimal poem as HTML string', () => {
     const poem = normalizePoem({
-      stanzas: [{ lines: [{ words: [{ text: 'Hello', size: 16 }] }] }],
+      stanzas: [{ lines: [{ fragments: [{ text: 'Hello', size: 16 }] }] }],
     })
     const html = renderPoemHTML(poem)
     expect(html).toContain('class="iambic-poem"')
@@ -15,7 +15,7 @@ describe('renderPoemHTML', () => {
 
   it('should render multiple words', () => {
     const poem = normalizePoem({
-      stanzas: [{ lines: [{ words: [{ text: 'Hello' }, { text: 'world' }] }] }],
+      stanzas: [{ lines: [{ fragments: [{ text: 'Hello' }, { text: 'world' }] }] }],
     })
     const html = renderPoemHTML(poem)
     expect(html).toContain('Hello')
@@ -26,8 +26,8 @@ describe('renderPoemHTML', () => {
     const poem = normalizePoem({
       stanzas: [{
         lines: [
-          { words: [{ text: 'Line one' }] },
-          { words: [{ text: 'Line two' }] },
+          { fragments: [{ text: 'Line one' }] },
+          { fragments: [{ text: 'Line two' }] },
         ],
       }],
     })
@@ -39,7 +39,7 @@ describe('renderPoemHTML', () => {
   it('should render background layers', () => {
     const poem = normalizePoem({
       backgrounds: [{ type: 'solid', color: '#ff0000' }],
-      stanzas: [{ lines: [{ words: [{ text: 'Test' }] }] }],
+      stanzas: [{ lines: [{ fragments: [{ text: 'Test' }] }] }],
     })
     const html = renderPoemHTML(poem)
     expect(html).toContain('background: #ff0000')
@@ -49,7 +49,7 @@ describe('renderPoemHTML', () => {
     const poem = normalizePoem({
       stanzas: [{
         lines: [{
-          words: [{
+          fragments: [{
             text: 'Rainbow',
             gradient: { colors: ['#ff0000', '#00ff00'], angle: 90 },
           }],
@@ -65,7 +65,7 @@ describe('renderPoemHTML', () => {
 describe('renderFullDocument', () => {
   it('should return a complete HTML document', () => {
     const poem = normalizePoem({
-      stanzas: [{ lines: [{ words: [{ text: 'Hi' }] }] }],
+      stanzas: [{ lines: [{ fragments: [{ text: 'Hi' }] }] }],
     })
     const doc = renderFullDocument(poem)
     expect(doc).toContain('<!DOCTYPE html>')

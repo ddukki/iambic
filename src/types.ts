@@ -1,14 +1,14 @@
-export interface WordGradient {
+export interface FragmentGradient {
   colors: string[]
   angle: number
 }
 
-export interface Word {
+export interface Fragment {
   text: string
   size?: number
   weight?: number
   color?: string
-  gradient?: WordGradient
+  gradient?: FragmentGradient
   style?: 'normal' | 'italic'
   offsetX?: number
   offsetY?: number
@@ -18,7 +18,7 @@ export interface Line {
   indent?: number
   alignment?: 'left' | 'center' | 'right'
   spacing?: number
-  words: Word[]
+  fragments: Fragment[]
 }
 
 export interface Stanza {
@@ -82,7 +82,7 @@ export interface Poem {
 }
 
 // Computed layout types
-export interface ComputedWord extends Word {
+export interface ComputedFragment extends Fragment {
   x: number
   y: number
   width: number
@@ -90,7 +90,7 @@ export interface ComputedWord extends Word {
 }
 
 export interface ComputedLine {
-  words: ComputedWord[]
+  fragments: ComputedFragment[]
   y: number
   height: number
   alignment: 'left' | 'center' | 'right'
