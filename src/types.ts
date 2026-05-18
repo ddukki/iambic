@@ -109,3 +109,8 @@ export interface ComputedLayout {
   backgrounds: BackgroundLayer[]
   canvas: Required<Canvas>
 }
+
+export interface RenderOptions {
+  padding?: number
+  allowExternalImages?: boolean
+}

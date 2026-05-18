@@ -56,4 +56,43 @@ describe('generateBackgroundStyles', () => {
     const styles = generateBackgroundStyles({ type: 'gradient', colors: ['#ff0000', '#0000ff'], angle: 180 })
     expect(styles).toContain('linear-gradient(180deg')
   })
+
+  it('rejected javascript: image URLs yield safe CSS', () => {
+    const styles = generateBackgroundStyles({ type: 'image', url: 'javascript:alert(1)', fit: 'cover' })
+    expect(styles).not.toContain('javascript')
+    expect(styles).not.toContain('url(')
+  })
+
+  it('sanitizes CSS injection in solid color', () => {
+    const styles = generateBackgroundStyles({ type: 'solid', color: 'red; background-image: url(evil.com)' })
+    expect(styles).toContain('background: red background-image: url(evil.com)')
+    expect(styles).not.toContain('; background-image:')
+  })
+
+  it('sanitizes CSS injection in gradient colors', () => {
+    const styles = generateBackgroundStyles({ type: 'gradient', colors: ['#ff0000; color: red', '#0000ff'] })
+    expect(styles).toContain('#ff0000 color: red')
+    expect(styles).not.toContain('; color: red')
+  })
+
+  it('sanitizes CSS injection in fragment color', () => {
+    const fragment: ComputedFragment = {
+      text: 'test', x: 0, y: 0, width: 20, height: 16,
+      size: 16, weight: 400, style: 'normal',
+      color: 'red; background: red',
+    }
+    const styles = generateFragmentStyles(fragment)
+    expect(styles).toContain('color: red background: red')
+    expect(styles).not.toContain('; background: red')
+  })
+
+  it('sanitizes gradient angle injection', () => {
+    const fragment: ComputedFragment = {
+      text: 'test', x: 0, y: 0, width: 20, height: 16,
+      size: 16, weight: 400, style: 'normal',
+      gradient: { colors: ['#ff0000'], angle: NaN },
+    }
+    const styles = generateFragmentStyles(fragment)
+    expect(styles).toContain('linear-gradient(180deg')
+  })
 })

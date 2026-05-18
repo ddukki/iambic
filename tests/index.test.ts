@@ -13,4 +13,15 @@ describe('index exports', () => {
     expect(doc).toContain('<!DOCTYPE html>')
     expect(doc).toContain('<html')
   })
+
+  it('render should pass options through', () => {
+    const poem = {
+      backgrounds: [{ type: 'image', url: 'https://example.com/bg.jpg' }],
+      stanzas: [{ lines: [{ fragments: [{ text: 'Hi' }] }] }],
+    }
+    const html = render(poem, { allowExternalImages: true })
+    expect(html).toContain('example.com')
+    const htmlDefault = render(poem)
+    expect(htmlDefault).not.toContain('example.com')
+  })
 })

@@ -1,6 +1,6 @@
 import { normalizePoem } from './schema'
 import { renderPoemHTML, renderFullDocument } from './html'
-import type { Poem } from './types'
+import type { Poem, RenderOptions } from './types'
 
 export type * from './types'
 export { normalizePoem } from './schema'
@@ -9,10 +9,10 @@ export type { ValidationResult, ValidationError } from './validator'
 export { renderPoemHTML, renderFullDocument } from './html'
 export { mountPoem } from './dom'
 
-export function render(poem: Poem): string {
-  return renderPoemHTML(normalizePoem(poem))
+export function render(poem: Poem, options?: RenderOptions): string {
+  return renderPoemHTML(normalizePoem(poem), options)
 }
 
-export function exportFile(poem: Poem): string {
-  return renderFullDocument(normalizePoem(poem))
+export function exportFile(poem: Poem, options?: RenderOptions): string {
+  return renderFullDocument(normalizePoem(poem), options)
 }

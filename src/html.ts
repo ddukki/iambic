@@ -1,6 +1,13 @@
-import type { Poem } from './types'
+import type { Poem, RenderOptions } from './types'
 import { computeLayout } from './layout'
 import { generateFragmentStyles, generatePoemStyles, generateBackgroundStyles } from './css'
+
+function normalizeOptions(options?: RenderOptions): Required<RenderOptions> {
+  return {
+    padding: options?.padding ?? 40,
+    allowExternalImages: options?.allowExternalImages ?? false,
+  }
+}
 
 function escapeHtml(text: string): string {
   return text
@@ -10,16 +17,16 @@ function escapeHtml(text: string): string {
     .replace(/"/g, '&quot;')
 }
 
-export function renderPoemHTML(poem: Poem, padding = 40): string {
+export function renderPoemHTML(poem: Poem, options?: RenderOptions): string {
+  const opts = normalizeOptions(options)
   const layout = computeLayout(poem)
-  const poemStyles = generatePoemStyles({ width: layout.width, height: layout.height + padding * 2, background: layout.canvas?.background ?? '#ffffff' })
+  const poemStyles = generatePoemStyles({ width: layout.width, height: layout.height + opts.padding * 2, background: layout.canvas?.background ?? '#ffffff' })
 
   let backgroundsHTML = ''
-  if (poem.backgrounds && poem.backgrounds.length > 0) {
-    backgroundsHTML = poem.backgrounds.map((bg, i) => {
-      const styles = generateBackgroundStyles(bg)
-      return `    <div class="iambic-background iambic-background-${i}" style="${styles}"></div>`
-    }).join('\n')
+  const backgrounds = opts.allowExternalImages ? (poem.backgrounds ?? []) : (poem.backgrounds?.filter(bg => bg.type !== 'image') ?? [])
+  for (let i = 0; i < backgrounds.length; i++) {
+    const styles = generateBackgroundStyles(backgrounds[i])
+    backgroundsHTML += `    <div class="iambic-background iambic-background-${i}" style="${styles}"></div>\n`
   }
 
   let stanzasHTML = layout.stanzas.map((stanza) => {
@@ -34,20 +41,22 @@ export function renderPoemHTML(poem: Poem, padding = 40): string {
   }).join('\n')
 
   return `<div class="iambic-poem" style="${poemStyles}">
-${backgroundsHTML}
-      <div class="iambic-content" style="position: absolute; top: ${padding}px; left: ${padding}px; right: ${padding}px; bottom: ${padding}px; z-index: 1;">
+${backgroundsHTML}      <div class="iambic-content" style="position: absolute; top: ${opts.padding}px; left: ${opts.padding}px; right: ${opts.padding}px; bottom: ${opts.padding}px; z-index: 1;">
 ${stanzasHTML}
       </div>
     </div>`
 }
 
-export function renderFullDocument(poem: Poem): string {
-  const poemHTML = renderPoemHTML(poem)
+export function renderFullDocument(poem: Poem, options?: RenderOptions): string {
+  const opts = normalizeOptions(options)
+  const poemHTML = renderPoemHTML(poem, opts)
+  const imgSrc = opts.allowExternalImages ? 'img-src *' : "img-src 'self'"
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; ${imgSrc}; style-src 'unsafe-inline'; script-src 'none'">
   <title>${escapeHtml(poem.meta?.title ?? 'Poem')}</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
