@@ -3,16 +3,14 @@ import type { Poem, ComputedLayout, ComputedStanza, ComputedLine, ComputedFragme
 const FONT_FAMILY = 'Georgia, "Times New Roman", serif'
 
 let _ctx: CanvasRenderingContext2D | null = null
-function measureText(text: string, size: number, weight?: number, style?: string): number {
+function measureText(text: string, size = 16, weight = 400, style = 'normal'): number {
   if (typeof document !== 'undefined') {
     if (!_ctx) {
       const c = document.createElement('canvas')
       _ctx = c.getContext('2d')
     }
     if (_ctx) {
-      const w = weight ?? 400
-      const s = style ?? 'normal'
-      _ctx.font = `${s} ${w} ${size}px ${FONT_FAMILY}`
+      _ctx.font = `${style} ${weight} ${size}px ${FONT_FAMILY}`
       return _ctx.measureText(text).width
     }
   }
@@ -21,19 +19,24 @@ function measureText(text: string, size: number, weight?: number, style?: string
 
 export { measureText }
 
-export function findSplitIndex(text: string, size: number, weight: number, style: string, x: number): number {
-  if (!text || text.length <= 1) return 1
+export function findSplitIndex(text: string, size?: number, weight?: number, style?: string, x?: number): number {
+  const t = text ?? ""
+  const s = size ?? 16
+  const w = weight ?? 400
+  const st = style ?? "normal"
+  const target = x ?? 0
+  if (!t || t.length <= 1) return 1
   let best = 1
-  let bestDist = Math.abs(x - measureText(text[0], size, weight, style))
-  for (let i = 2; i < text.length; i++) {
-    const w = measureText(text.slice(0, i), size, weight, style)
-    const dist = Math.abs(x - w)
+  let bestDist = Math.abs(target - measureText(t[0], s, w, st))
+  for (let i = 2; i < t.length; i++) {
+    const measured = measureText(t.slice(0, i), s, w, st)
+    const dist = Math.abs(target - measured)
     if (dist < bestDist) {
       bestDist = dist
       best = i
     }
   }
-  return Math.max(1, Math.min(text.length - 1, best))
+  return Math.max(1, Math.min(t.length - 1, best))
 }
 
 export function computeLayout(poem: Poem): ComputedLayout {
@@ -53,7 +56,7 @@ export function computeLayout(poem: Poem): ComputedLayout {
 
       let totalFragmentWidth = 0
       for (const f of line.fragments) {
-        totalFragmentWidth += measureText(f.text, f.size ?? 16, f.weight, f.style)
+        totalFragmentWidth += measureText(f.text, f.size, f.weight, f.style)
       }
 
       let xOffset: number
